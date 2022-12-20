@@ -1,0 +1,19 @@
+diff --git a/framework/base/ArrayableTrait.php b/framework/base/ArrayableTrait.php
+index 2da307ff5..99e5be4cd 100644
+--- a/framework/base/ArrayableTrait.php
++++ b/framework/base/ArrayableTrait.php
+@@ -225,7 +225,12 @@ trait ArrayableTrait
+         }
+
+         if (empty($expand)) {
+-            return $result;
++            if ($this instanceof \yii\db\BaseActiveRecord) {
++                $relations = array_keys($this->getRelatedRecords());
++                return array_merge($result, array_combine($relations, $relations));
++            } else {
++                return $result;
++            }
+         }
+
+         foreach ($this->extraFields() as $field => $definition) {
+
